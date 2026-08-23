@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16a34a">
+<title>钱需慢慢攒，心急则亏钱</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="攒钱账本">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <h1 class="app-title" id="page-title">钱需慢慢攒，心急则亏钱</h1>
+    <div class="topbar-date" id="topbar-date"></div>
+  </header>
+  <main id="pages">
+    <section class="page active" data-page="home" aria-label="账单页"></section>
+    <section class="page" data-page="stats" aria-label="统计页"></section>
+    <section class="page" data-page="record" aria-label="记账页"></section>
+    <section class="page" data-page="settings" aria-label="设置页"></section>
+  </main>
+  <nav class="tabbar" aria-label="底部导航">
+    <button type="button" class="tab active" data-tab="home" aria-label="账单"><span class="tab-icon" data-ic="list"></span><span class="tab-label">账单</span></button>
+    <button type="button" class="tab" data-tab="stats" aria-label="统计"><span class="tab-icon" data-ic="chart-pie"></span><span class="tab-label">统计</span></button>
+    <button type="button" class="tab tab-plus" data-tab="record" aria-label="记一笔"><span class="tab-icon plus" data-ic="plus"></span></button>
+    <button type="button" class="tab" data-tab="settings" aria-label="设置"><span class="tab-icon" data-ic="settings"></span><span class="tab-label">设置</span></button>
+  </nav>
+</div>
+<div id="overlay-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="js/main.mjs"></script>
+</body>
+</html>
