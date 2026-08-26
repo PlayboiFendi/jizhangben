@@ -232,7 +232,7 @@ async function renderHomePage() {
   const groups = groupRecordsByDay(monthRecords, todayKey());
   const catMap = new Map(cats.map((c) => [c.id, c]));
   const page = document.querySelector('.page[data-page="home"]');
-  page.innerHTML = homePageHTML(monthLabel(homeState.month), monthSummary, todayTotal, groups, catMap);
+  page.innerHTML = homePageHTML(monthLabel(homeState.month), monthSummary, todayTotal, groups, catMap, homeState.month);
   bindHomeEvents(records, cats);
 }
 

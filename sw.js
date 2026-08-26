@@ -1,5 +1,5 @@
 // sw.js —— Service Worker：缓存全部静态资源，让 App 离线可用
-const CACHE_NAME = 'ledger-app-v14';
+const CACHE_NAME = 'ledger-app-v15';
 const ASSETS = [
   './',
   './index.html',

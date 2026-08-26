@@ -1,7 +1,7 @@
 // render.mjs —— 纯 HTML 渲染函数（不碰 DOM/数据库，便于单元测试）
 import { ICONS } from './icons.mjs';
 import { formatAmount } from './numpad.mjs';
-import { fmtTime, todayLabel } from './stat.mjs';
+import { fmtTime, todayLabel, currentMonthKey } from './stat.mjs';
 
 export function iconSVG(name) {
   return ICONS[name] || '';
@@ -85,48 +85,60 @@ export function fmtMoney(n) {
 }
 
 // ---------- 首页（账单页） ----------
-export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap) {
-  const fallbackCat = { name: '其他', icon: 'circle-ellipsis', color: '#8b93a0' };
+// ---------- 首页（今日页） ----------
+function daysInMonth(mk) {
+  const p = String(mk).split('-');
+  const y = parseInt(p[0], 10);
+  const m = parseInt(p[1], 10);
+  return new Date(y, m, 0).getDate();
+}
 
+function heroRingHTML(pct, over, near) {
+  const safe = Math.max(0, Math.min(100, pct || 0));
+  const color = over ? '#FF6B6B' : near ? '#FFB454' : '#2DD4A7';
+  return (
+    '<svg class="hv-ring" viewBox="0 0 36 36" aria-hidden="true">' +
+    '<circle class="hv-ring-bg" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.4"/>' +
+    '<circle class="hv-ring-fg" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.4" stroke-linecap="round" stroke="' + color + '" stroke-dasharray="' + safe + ' 100" transform="rotate(-90 18 18)"/>' +
+    '</svg>'
+  );
+}
+
+export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap, monthKey) {
+  const fallbackCat = { name: '其他', icon: 'circle-ellipsis', color: '#8b93a0' };
   const budget = monthSummary.budget || null;
+
+  // 日均：当前月用已过天数，历史月份用整月天数
+  const mk = monthKey || currentMonthKey();
+  const isCur = mk === currentMonthKey();
+  const days = isCur ? Math.max(1, new Date().getDate()) : daysInMonth(mk);
+  const avg = monthSummary.count ? Math.round((monthSummary.total / days) * 100) / 100 : 0;
+
   let budgetHTML = '';
   if (budget) {
     const over = budget.left < 0;
+    const near = !over && budget.pct >= 85;
     budgetHTML =
-      '<div class="budget-block">' +
-      '<div class="budget-row"><span class="budget-label">月预算 ' + fmtMoney(budget.amount) + '</span>' +
-      '<span class="budget-pct">已用 ' + budget.pct + '%</span></div>' +
-      '<div class="budget-bar"><i style="width:' + Math.min(100, budget.pct) + '%"></i></div>' +
-      '<div class="budget-hint">' + (over ? '已超预算 ' + fmtMoney(-budget.left) : '再花 ' + fmtMoney(budget.left) + ' 就超预算啦') + '</div>' +
-      '</div>';
+      '<div class="hv-budget">' +
+      heroRingHTML(budget.pct, over, near) +
+      '<div class="hv-budget-txt">' +
+      '<span class="hv-budget-title">月预算 ' + fmtMoney(budget.amount) + '</span>' +
+      '<span class="hv-budget-sub">' + (over ? '已超预算 ' + fmtMoney(-budget.left) : '剩余 ' + fmtMoney(budget.left) + ' · 已用 ' + budget.pct + '%') + '</span>' +
+      '</div></div>';
   } else {
-    budgetHTML = '<button type="button" class="budget-empty" id="budget-set">设置月预算 ›</button>';
+    budgetHTML = '<button type="button" class="hv-budget-empty" id="budget-set">设置月预算 ›</button>';
   }
-
-  const overview =
-    '<div class="overview">' +
-    '<div class="ov-row">' +
-    '<div class="ov-col"><span class="ov-label">本月支出</span>' +
-    '<span class="ov-value">' + fmtMoney(monthSummary.total) + '</span>' +
-    '<span class="ov-sub">共 ' + monthSummary.count + ' 笔</span></div>' +
-    '<span class="ov-divider"></span>' +
-    '<div class="ov-col"><span class="ov-label">今日支出</span>' +
-    '<span class="ov-value">' + fmtMoney(todayTotal) + '</span>' +
-    '<span class="ov-sub">' + escapeHTML(todayLabel()) + '</span></div>' +
-    '</div>' +
-    budgetHTML +
-    '</div>';
 
   const quickCats = Array.from(catMap.values()).filter((c) => c && c.id && c.name).slice(0, 8);
   let quick = '';
   if (quickCats.length) {
     quick =
-      '<div class="quick-grid">' +
+      '<div class="hv-quick-grid">' +
       quickCats
         .map(
           (c) =>
             '<button type="button" class="quick-item" data-cat="' + escapeAttr(c.id) + '">' +
-            '<span class="quick-ic" style="background-color:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
+            '<span class="quick-ic" style="background:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
             '<span class="quick-name">' + escapeHTML(c.name) + '</span></button>'
         )
         .join('') +
@@ -135,13 +147,13 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
 
   let list = '';
   if (!groups.length) {
-    list = homeEmptyHTML();
+    list = '<div class="hv-empty">' + escapeHTML('还没有账目，点下方 ＋ 记一笔') + '</div>';
   } else {
     groups.forEach((g) => {
       list +=
         '<button type="button" class="group-title" data-day="' + g.day + '">' +
         '<span>' + escapeHTML(g.label) + '</span>' +
-        '<span class="group-sum">支出 ' + fmtMoney(g.total) + ' <span class="group-chev">›</span></span></button>';
+        '<span class="hv-group-sum">' + fmtMoney(g.total) + ' <span class="group-chev">›</span></span></button>';
       g.items.forEach((r) => {
         const c = catMap.get(r.catId) || fallbackCat;
         list +=
@@ -157,15 +169,37 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
   }
 
   return (
-    '<div class="row-head">' +
-    '<span class="h2">' + escapeHTML(monthText) + '</span>' +
-    '<span class="month-nav">' +
+    '<div class="hv">' +
+    '<div class="hv-head">' +
+    '<div class="hv-hello"><span class="hv-greet">今日账本</span>' +
+    '<span class="hv-date">' + escapeHTML(todayLabel()) + '</span></div>' +
+    '<span class="hv-month-nav">' +
     '<button type="button" class="month-chip" id="home-month-prev" aria-label="上个月">‹</button>' +
+    '<span class="hv-month">' + escapeHTML(monthText) + '</span>' +
     '<button type="button" class="month-chip" id="home-month-next" aria-label="下个月">›</button>' +
     '</span></div>' +
-    overview + quick +
-    '<p class="sec-title">账单明细</p>' +
-    list
+
+    '<section class="hv-hero">' +
+    '<div class="hv-hero-top"><span class="hv-hero-label">本月支出</span>' +
+    '<span class="hv-hero-count">' + monthSummary.count + ' 笔</span></div>' +
+    '<div class="hv-amount"><span class="hv-cur">¥</span><span class="hv-num">' + formatAmount(String(monthSummary.total)) + '</span></div>' +
+    '<div class="hv-meta">' +
+    '<span>日均 ' + fmtMoney(avg) + '</span><i class="hv-dot"></i>' +
+    '<span>今日 ' + fmtMoney(todayTotal) + '</span>' +
+    '</div>' +
+    budgetHTML +
+    '</section>' +
+
+    '<section class="hv-sec">' +
+    '<div class="hv-sec-head"><span class="hv-sec-title">快速记一笔</span></div>' +
+    quick +
+    '</section>' +
+
+    '<section class="hv-sec">' +
+    '<div class="hv-sec-head"><span class="hv-sec-title">账单明细</span></div>' +
+    list +
+    '</section>' +
+    '</div>'
   );
 }
 
