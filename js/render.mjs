@@ -41,7 +41,7 @@ export function recordPageHTML(cats, opts) {
       const active = c.id === catId;
       return (
         '<button type="button" class="chip' + (active ? ' active' : '') + '" data-cat="' + c.id + '" aria-pressed="' + active + '">' +
-        '<span class="chip-ic" style="background:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
+        '<span class="chip-ic" style="--c:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
         '<span>' + escapeHTML(c.name) + '</span></button>'
       );
     })
@@ -95,7 +95,7 @@ function daysInMonth(mk) {
 
 function heroRingHTML(pct, over, near) {
   const safe = Math.max(0, Math.min(100, pct || 0));
-  const color = over ? '#FF6B6B' : near ? '#FFB454' : '#2DD4A7';
+  const color = over ? '#FF6B6B' : near ? '#FFB454' : '#5AC8FA';
   return (
     '<svg class="hv-ring" viewBox="0 0 36 36" aria-hidden="true">' +
     '<circle class="hv-ring-bg" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.4"/>' +
@@ -138,7 +138,7 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
         .map(
           (c) =>
             '<button type="button" class="quick-item" data-cat="' + escapeAttr(c.id) + '">' +
-            '<span class="quick-ic" style="background:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
+            '<span class="quick-ic" style="--c:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
             '<span class="quick-name">' + escapeHTML(c.name) + '</span></button>'
         )
         .join('') +
@@ -163,7 +163,7 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
         const subText = subParts.join(' · ');
         list +=
           '<button type="button" class="tx-row" data-id="' + r.id + '">' +
-          '<span class="cat-icon" style="background:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
+          '<span class="cat-icon" style="--c:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
           '<span class="tx-main">' +
           '<span class="tx-name">' + escapeHTML(mainName) + '</span>' +
           (subText ? '<span class="tx-sub">' + escapeHTML(subText) + '</span>' : '') +

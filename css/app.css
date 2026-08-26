@@ -9,14 +9,14 @@
   --text: light-dark(#0f172a, #f2f5f9);
   --text-muted: light-dark(#475569, #9aa5b5);
   --border: light-dark(#e5eaf2, #232d3b);
-  --primary: light-dark(#4d7cfe, #7aa2ff);
+  --primary: light-dark(#3d9be9, #5ac8fa);
   --primary-fg: #ffffff;
-  --primary-soft: light-dark(#eaf0ff, #16233a);
+  --primary-soft: light-dark(rgba(61, 155, 233, 0.12), rgba(90, 200, 250, 0.16));
   --danger: light-dark(#e5484d, #ff7b7b);
   --overlay: light-dark(rgba(15, 23, 42, 0.44), rgba(0, 0, 0, 0.66));
   --shadow-sm: light-dark(0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4));
   --shadow: light-dark(0 10px 30px rgba(15, 23, 42, 0.10), 0 10px 30px rgba(0, 0, 0, 0.4));
-  --summary-bg: linear-gradient(135deg, #4d7cfe 0%, #2dd4a7 100%);
+  --summary-bg: linear-gradient(135deg, #4da3ff 0%, #5ac8fa 100%);
   --radius: 18px;
   --font-display: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
 }
@@ -642,7 +642,7 @@ button.month-chip:active { transform: scale(0.97); }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --summary-bg: linear-gradient(135deg, #4d7cfe 0%, #2dd4a7 100%);
+    --summary-bg: linear-gradient(135deg, #4da3ff 0%, #5ac8fa 100%);
   }
 }
 
@@ -658,8 +658,8 @@ button.month-chip:active { transform: scale(0.97); }
   --hv-ring-track: light-dark(rgba(15, 23, 42, 0.08), rgba(255, 255, 255, 0.12));
   --hv-surface: light-dark(#ffffff, #111827);
   --hv-border: light-dark(rgba(15, 23, 42, 0.06), rgba(255, 255, 255, 0.08));
-  --hv-blue: #5b8cff;
-  --hv-green: #2dd4a7;
+  --hv-blue: #5ac8fa;
+  --hv-green: #5ac8fa;
   --hv-red: #ff6b6b;
   --hv-warn: #ffb454;
 }
@@ -718,12 +718,12 @@ button.month-chip:active { transform: scale(0.97); }
 .hv-hero::before {
   width: 180px; height: 180px;
   left: -70px; top: -80px;
-  background: light-dark(rgba(91, 140, 255, 0.16), rgba(91, 140, 255, 0.22));
+  background: light-dark(rgba(90, 200, 250, 0.16), rgba(90, 200, 250, 0.22));
 }
 .hv-hero::after {
   width: 160px; height: 160px;
   right: -60px; bottom: -80px;
-  background: light-dark(rgba(45, 212, 167, 0.16), rgba(45, 212, 167, 0.16));
+  background: light-dark(rgba(90, 200, 250, 0.16), rgba(90, 200, 250, 0.16));
 }
 .hv-hero-top {
   position: relative;
@@ -743,7 +743,7 @@ button.month-chip:active { transform: scale(0.97); }
   font-size: 11px;
   font-weight: 600;
   color: var(--hv-blue);
-  background: light-dark(rgba(91, 140, 255, 0.10), rgba(91, 140, 255, 0.16));
+  background: light-dark(rgba(90, 200, 250, 0.12), rgba(90, 200, 250, 0.18));
   padding: 4px 9px;
   border-radius: 999px;
 }
@@ -958,3 +958,32 @@ button.month-chip:active { transform: scale(0.97); }
 .btn-primary { border-radius: 16px; box-shadow: 0 10px 22px rgba(77, 124, 254, 0.26); }
 .btn-ghost { border-radius: 16px; }
 .field input, .field select { border-radius: 14px; }
+
+/* ============================================================
+   iOS 毛玻璃图标 + 底部导航图标放大（light blue）
+   ============================================================ */
+.cat-icon,
+.quick-ic,
+.chip .chip-ic {
+  background: color-mix(in srgb, var(--c, #5ac8fa) 28%, transparent) !important;
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border: 1px solid color-mix(in srgb, #ffffff 28%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 14px color-mix(in srgb, var(--c, #5ac8fa) 20%, transparent) !important;
+}
+.cat-icon svg,
+.quick-ic svg,
+.chip .chip-ic svg { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14)); }
+
+.set-ic {
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border: 1px solid color-mix(in srgb, #ffffff 26%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* 底部导航：去文字、放大图标 */
+.tab { padding: 8px 0 7px; }
+.tab-icon svg { width: 27px; height: 27px; }
+.tab.active .tab-icon { color: var(--primary); }
