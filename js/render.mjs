@@ -212,6 +212,27 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
 }
 
 // ---------- 统计页 ----------
+function donutHTML(rows) {
+  if (!rows.length) return '';
+  const C = 100;
+  let acc = 0;
+  const segs = rows
+    .map((r) => {
+      const pct = Math.max(0, Math.min(100, r.pct || 0));
+      const seg = '<circle cx="18" cy="18" r="15.9155" fill="none" stroke="' + r.color + '" stroke-width="4.4" stroke-dasharray="' + pct + ' ' + (C - pct) + '" stroke-dashoffset="' + (-acc) + '"></circle>';
+      acc += pct;
+      return seg;
+    })
+    .join('');
+  const total = rows.reduce((sum, r) => sum + (r.total || 0), 0);
+  return (
+    '<div class="donut-wrap">' +
+    '<svg class="donut" viewBox="0 0 36 36"><g transform="rotate(-90 18 18)">' + segs + '</g></svg>' +
+    '<div class="donut-center"><span class="donut-total">' + fmtMoney(total) + '</span><span class="donut-sub">分类合计</span></div>' +
+    '</div>'
+  );
+}
+
 export function statsPageHTML(monthText, monthSummary, bars, rows) {
   const max = Math.max.apply(null, bars.map((b) => b.total)) || 1;
   const barsHTML = bars
@@ -251,6 +272,7 @@ export function statsPageHTML(monthText, monthSummary, bars, rows) {
     '<div class="bars">' + barsHTML + '</div>' +
     '<p class="bar-hint">点某一天查看当天金额与分类占比</p>' +
     '<p class="sec-title">分类占比</p>' +
+    donutHTML(rows) +
     rowsHTML
   );
 }

@@ -2,23 +2,23 @@
    配色灵感：抖音「记账 APP 首页优化」最终版（清新浅绿系） */
 :root {
   color-scheme: light dark;
-  --bg: light-dark(#eef3ef, #0c1210);
-  --surface: light-dark(#ffffff, #141b17);
-  --surface-2: light-dark(#f1f6f2, #1e2822);
-  --surface-3: light-dark(#e4ece6, #29352d);
-  --text: light-dark(#122019, #eaf2ed);
-  --text-muted: light-dark(#435048, #c0cbc3);
-  --border: light-dark(#e2eae4, #2b3a31);
-  --primary: light-dark(#16a34a, #4ade80);
-  --primary-fg: light-dark(#ffffff, #052e16);
-  --primary-soft: light-dark(#e8f7ee, #10331f);
-  --danger: light-dark(#d63a3f, #ff8a80);
-  --overlay: light-dark(rgba(13, 32, 22, 0.44), rgba(0, 0, 0, 0.62));
-  --shadow-sm: light-dark(0 1px 2px rgba(13, 32, 22, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4));
-  --shadow: light-dark(0 10px 30px rgba(13, 32, 22, 0.1), 0 10px 30px rgba(0, 0, 0, 0.35));
-  --summary-bg: linear-gradient(135deg, #15803d 0%, #14532d 100%);
+  --bg: light-dark(#f5f7fa, #0b0f14);
+  --surface: light-dark(#ffffff, #111827);
+  --surface-2: light-dark(#f1f4f9, #1a2333);
+  --surface-3: light-dark(#e7ecf4, #232e42);
+  --text: light-dark(#0f172a, #f2f5f9);
+  --text-muted: light-dark(#475569, #9aa5b5);
+  --border: light-dark(#e5eaf2, #232d3b);
+  --primary: light-dark(#4d7cfe, #7aa2ff);
+  --primary-fg: #ffffff;
+  --primary-soft: light-dark(#eaf0ff, #16233a);
+  --danger: light-dark(#e5484d, #ff7b7b);
+  --overlay: light-dark(rgba(15, 23, 42, 0.44), rgba(0, 0, 0, 0.66));
+  --shadow-sm: light-dark(0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4));
+  --shadow: light-dark(0 10px 30px rgba(15, 23, 42, 0.10), 0 10px 30px rgba(0, 0, 0, 0.4));
+  --summary-bg: linear-gradient(135deg, #4d7cfe 0%, #2dd4a7 100%);
   --radius: 18px;
-  --font-display: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -642,7 +642,7 @@ button.month-chip:active { transform: scale(0.97); }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --summary-bg: linear-gradient(135deg, #1b7a45 0%, #0f3d22 100%);
+    --summary-bg: linear-gradient(135deg, #4d7cfe 0%, #2dd4a7 100%);
   }
 }
 
@@ -899,3 +899,62 @@ button.month-chip:active { transform: scale(0.97); }
 }
 .hv .tx-row .tx-time { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .hv-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 30px 0; }
+
+/* ============================================================
+   全站升级：统计 / 记账 / 设置 / 弹层（RonDesignLab 质感）
+   ============================================================ */
+/* 统计页 Hero */
+.summary {
+  background: var(--summary-bg);
+  color: #ffffff;
+  border-radius: 26px;
+  padding: 20px 20px 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 18px 40px rgba(77, 124, 254, 0.25);
+}
+.summary .sum-label { letter-spacing: 1.4px; }
+.summary .sum-value { font-size: 38px; font-weight: 800; letter-spacing: -0.8px; }
+.summary .sum-sub { opacity: 0.92; }
+
+/* 柱状图 */
+.bars { gap: 5px; height: 132px; }
+.bar { width: 64%; border-radius: 8px 8px 3px 3px; background: var(--primary-soft); }
+.bar.strong { background: var(--summary-bg); box-shadow: 0 6px 16px rgba(77, 124, 254, 0.35); }
+.bar-day { font-size: 10px; }
+
+/* 分类占比环形图 */
+.donut-wrap { position: relative; width: 168px; height: 168px; margin: 2px auto 16px; }
+.donut { width: 100%; height: 100%; display: block; }
+.donut-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+}
+.donut-total { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+.donut-sub { font-size: 11px; color: var(--text-muted); }
+
+/* 分类条目 */
+.cat-item { gap: 10px; padding: 8px 2px 4px; }
+.cat-dot { width: 10px; height: 10px; border-radius: 3px; }
+.cat-val { font-weight: 700; }
+
+/* 记账页 */
+.amount-big { font-size: 56px; font-weight: 800; }
+.amount-cur { font-size: 20px; }
+.chip .chip-ic { border-radius: 11px; }
+.key { border-radius: 16px; }
+.save-btn { border-radius: 18px; box-shadow: 0 12px 26px rgba(77, 124, 254, 0.28); }
+
+/* 设置页 */
+.set-row { border-radius: 18px; }
+.set-row .set-ic { border-radius: 12px; }
+
+/* 弹层玻璃化 */
+.sheet {
+  backdrop-filter: saturate(1.3) blur(20px);
+  -webkit-backdrop-filter: saturate(1.3) blur(20px);
+  border-top: 1px solid var(--border);
+  border-radius: 28px 28px 0 0;
+}
+.btn-primary { border-radius: 16px; box-shadow: 0 10px 22px rgba(77, 124, 254, 0.26); }
+.btn-ghost { border-radius: 16px; }
+.field input, .field select { border-radius: 14px; }
