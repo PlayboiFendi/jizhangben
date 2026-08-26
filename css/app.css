@@ -965,15 +965,8 @@ button.month-chip:active { transform: scale(0.97); }
 .cat-icon,
 .quick-ic,
 .chip .chip-ic {
-  background: color-mix(in srgb, var(--c, #5ac8fa) 28%, transparent) !important;
-  backdrop-filter: blur(18px) saturate(1.5);
-  -webkit-backdrop-filter: blur(18px) saturate(1.5);
-  border: 1px solid color-mix(in srgb, #ffffff 28%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 4px 14px color-mix(in srgb, var(--c, #5ac8fa) 20%, transparent) !important;
+  background: var(--c, #5ac8fa) !important;
 }
-.cat-icon svg,
-.quick-ic svg,
-.chip .chip-ic svg { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14)); }
 
 .set-ic {
   background: color-mix(in srgb, var(--primary) 20%, transparent);
