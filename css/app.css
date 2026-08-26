@@ -62,6 +62,7 @@ input, textarea, select { font-family: inherit; }
   letter-spacing: 0.6px;
   line-height: 1.3;
 }
+.app-title.hidden { display: none; }
 
 main { flex: 1; padding: 14px 16px calc(104px + env(safe-area-inset-bottom, 0px)); }
 .page { display: none; }
@@ -814,19 +815,18 @@ button.month-chip:active { transform: scale(0.97); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
-  background: var(--hv-surface);
-  border: 1px solid var(--hv-border);
-  border-radius: 18px;
-  padding: 13px 4px 11px;
-  box-shadow: light-dark(0 4px 14px rgba(15, 23, 42, 0.05), 0 6px 18px rgba(0, 0, 0, 0.28));
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  box-shadow: none;
   transition: transform 0.12s ease;
 }
-.hv .quick-item:active { transform: scale(0.95); }
+.hv .quick-item:active { transform: scale(0.94); }
 .hv .quick-ic {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 62px;
+  height: 62px;
+  border-radius: 19px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -834,7 +834,7 @@ button.month-chip:active { transform: scale(0.97); }
   background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(0, 0, 0, 0.12));
   box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.35);
 }
-.hv .quick-ic svg { width: 20px; height: 20px; }
+.hv .quick-ic svg { width: 28px; height: 28px; }
 .hv .quick-name { font-size: 12px; color: var(--text); }
 
 /* 账单明细 */
@@ -885,14 +885,9 @@ button.month-chip:active { transform: scale(0.97); }
 .hv .tx-row .tx-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .hv .tx-row .tx-name { font-size: 15px; font-weight: 600; }
 .hv .tx-row .tx-note { font-size: 13px; color: var(--text-muted); }
-.hv .tx-row .tx-app {
-  align-self: flex-start;
-  font-size: 11px;
-  color: var(--hv-blue);
-  background: light-dark(rgba(91, 140, 255, 0.10), rgba(91, 140, 255, 0.14));
-  padding: 2px 7px;
-  border-radius: 999px;
-  margin-top: 1px;
+.hv .tx-row .tx-sub {
+  font-size: 12px;
+  color: var(--text-muted);
 }
 .hv .tx-row .tx-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .hv .tx-row .tx-amount {

@@ -51,7 +51,10 @@ export function showPage(name) {
     t.classList.toggle('active', t.dataset.tab === currentPage);
   });
   const title = document.getElementById('page-title');
-  if (title) title.textContent = PAGE_TITLES[currentPage];
+  if (title) {
+    title.textContent = PAGE_TITLES[currentPage];
+    title.classList.toggle('hidden', currentPage === 'home');
+  }
   const fn = renderers[currentPage];
   if (fn) fn();
 }

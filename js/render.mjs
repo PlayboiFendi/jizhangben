@@ -156,14 +156,22 @@ export function homePageHTML(monthText, monthSummary, todayTotal, groups, catMap
         '<span class="hv-group-sum">' + fmtMoney(g.total) + ' <span class="group-chev">›</span></span></button>';
       g.items.forEach((r) => {
         const c = catMap.get(r.catId) || fallbackCat;
+        const mainName = r.app ? r.app : c.name;
+        const subParts = [];
+        if (r.app) subParts.push(c.name);
+        if (r.note) subParts.push(r.note);
+        const subText = subParts.join(' · ');
         list +=
           '<button type="button" class="tx-row" data-id="' + r.id + '">' +
           '<span class="cat-icon" style="background:' + c.color + '">' + iconSVG(c.icon) + '</span>' +
-          '<span class="tx-main"><span class="tx-name">' + escapeHTML(c.name) + '</span>' +
-          (r.note ? '<span class="tx-note">' + escapeHTML(r.note) + '</span>' : '') +
-          (r.app ? '<span class="tx-app">' + escapeHTML(r.app) + '</span>' : '') +
-          '</span><span class="tx-right"><span class="tx-amount">-' + fmtMoney(r.amount) + '</span>' +
-          '<span class="tx-time">' + fmtTime(r.createdAt) + '</span></span></button>';
+          '<span class="tx-main">' +
+          '<span class="tx-name">' + escapeHTML(mainName) + '</span>' +
+          (subText ? '<span class="tx-sub">' + escapeHTML(subText) + '</span>' : '') +
+          '</span>' +
+          '<span class="tx-right">' +
+          '<span class="tx-amount">-' + fmtMoney(r.amount) + '</span>' +
+          '<span class="tx-time">' + fmtTime(r.createdAt) + '</span>' +
+          '</span></button>';
       });
     });
   }
