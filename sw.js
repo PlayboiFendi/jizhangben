@@ -1,5 +1,5 @@
 // sw.js —— Service Worker：缓存全部静态资源，让 App 离线可用
-const CACHE_NAME = 'ledger-app-v19';
+const CACHE_NAME = 'ledger-app-v20';
 const ASSETS = [
   './',
   './index.html',
@@ -39,20 +39,28 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 网络优先：联网时总是拉取最新版本（开发迭代时能即时看到改动）；
-// 断网时回退到缓存，保证离线可用。快捷指令带参 URL 也能加载。
+// 缓存优先（stale-while-revalidate）：打开时直接用本地缓存秒开，
+// 同时后台静默更新缓存；断网也能用；快捷指令带参 URL 通过 ignoreSearch 命中首页缓存。
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    fetch(req)
-      .then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-        return res;
-      })
-      .catch(() => caches.match(req, { ignoreSearch: true }))
+    caches.match(req, { ignoreSearch: true }).then((cached) => {
+      // 后台更新：网络成功就把最新内容写回缓存（不阻塞本次响应）
+      const network = fetch(req)
+        .then((res) => {
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => cached);
+      // 有缓存直接返回缓存（秒开）；没有缓存才等网络
+      return cached || network;
+    })
   );
 });
